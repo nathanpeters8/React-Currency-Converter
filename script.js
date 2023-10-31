@@ -6,8 +6,8 @@ class CurrencyConverter extends React.Component {
     this.state = {
       rate: 0.89,
       usd: 1,
-      euro: 1 * 0.89
-     };
+      euro: 1 * 0.89,
+    };
 
     this.handleUsdChange = this.handleUsdChange.bind(this);
     this.handleEuroChange = this.handleEuroChange.bind(this);
@@ -22,65 +22,53 @@ class CurrencyConverter extends React.Component {
   toEuro(amount, rate) {
     return amount * rate;
   }
-  
+
+  // return conversion value if input is a number
+  convert(amount, rate, equation) {
+    const input = parseFloat(amount);
+    if (Number.isNaN(input)) {
+      return '';
+    }
+    return equation(input, rate).toFixed(3);
+  }
 
   // update state when USD input is changed
   handleUsdChange(event) {
-    const input = parseFloat(event.target.value);
-    if(Number.isNaN(input)) {
-      this.setState({
-        usd: '',
-        euro: ''
-      });
-
-      return;
-    }
-
-    const euro = this.toEuro(input, this.state.rate).toFixed(3);
+    const euro = this.convert(event.target.value, this.state.rate, this.toEuro);
     this.setState({
-      usd: input,
+      usd: event.target.value,
       euro
-    });
+    })
   }
 
   // update state when Euro input is changed
   handleEuroChange(event) {
-    const input = parseFloat(event.target.value);
-    if(Number.isNaN(input)) {
-      this.setState({
-        usd: '',
-        euro: ''
-      });
-
-      return;
-    }
-
-    const usd = this.toEuro(input, this.state.rate).toFixed(3);
+    const usd = this.convert(event.target.value, this.state.rate, this.toUsd);
     this.setState({
-      euro: input,
-      usd
+      euro: event.target.value,
+      usd,
     });
   }
 
-  render() { 
+  render() {
     const { rate, usd, euro } = this.state;
-    return ( 
-      <div className="container">
-        <div className="text-center p-3 mb-2">
-          <h2 className="mb-2 border-bottom">Currency Converter</h2>
+    return (
+      <div className='container'>
+        <div className='text-center p-3 mb-2'>
+          <h2 className='mb-2 border-bottom'>Currency Converter</h2>
           <h4>USD 1 : {rate} EURO</h4>
         </div>
         <div className='row text-center'>
           <div className='col-12'>
             <span className='mr-1'>USD</span>
-            <input value={usd} onChange={this.handleUsdChange} /> 
+            <input value={usd} onChange={this.handleUsdChange} />
             <span className='mx-3'>=</span>
-            <input value={euro} onChange={this.handleEuroChange} /> 
+            <input value={euro} onChange={this.handleEuroChange} />
             <span className='ml-1'>EURO</span>
           </div>
         </div>
       </div>
-     );
+    );
   }
 }
 
