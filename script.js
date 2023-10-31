@@ -1,5 +1,15 @@
 // Currency Converter
 
+// Child Component for USD and EURO input fields
+class CurrencyInput extends React.Component {
+  render() { 
+    const { value, handleChange } = this.props;
+    
+    return <input value={value} onChange={handleChange} type='number'/>;
+  }
+}
+
+// Parent Currency Converter Component
 class CurrencyConverter extends React.Component {
   constructor(props) {
     super(props);
@@ -35,6 +45,7 @@ class CurrencyConverter extends React.Component {
   // update state when USD input is changed
   handleUsdChange(event) {
     const euro = this.convert(event.target.value, this.state.rate, this.toEuro);
+
     this.setState({
       usd: event.target.value,
       euro
@@ -44,6 +55,7 @@ class CurrencyConverter extends React.Component {
   // update state when Euro input is changed
   handleEuroChange(event) {
     const usd = this.convert(event.target.value, this.state.rate, this.toUsd);
+
     this.setState({
       euro: event.target.value,
       usd,
@@ -61,9 +73,9 @@ class CurrencyConverter extends React.Component {
         <div className='row text-center'>
           <div className='col-12'>
             <span className='mr-1'>USD</span>
-            <input value={usd} onChange={this.handleUsdChange} />
+            <CurrencyInput value={usd} handleChange={this.handleUsdChange} />
             <span className='mx-3'>=</span>
-            <input value={euro} onChange={this.handleEuroChange} />
+            <CurrencyInput value={euro} handleChange={this.handleEuroChange} />
             <span className='ml-1'>EURO</span>
           </div>
         </div>
